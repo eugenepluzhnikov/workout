@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import { useState } from "react";
 
 import * as React from "react";
 import Box from "@mui/material/Box";
@@ -7,18 +6,13 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { blueGrey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
-import { Container } from "@mui/material";
 import Button from "@mui/material/Button";
 
-
 export default function BasicStack() {
-  // const [count, setCount] = useState(login);
-
+  const [count, setCount] = useState(true);
   return (
-
     <Box
       component="form"
-      autoComplete="off"
       sx={{
         height: "100vh",
         margin: 0,
@@ -41,13 +35,6 @@ export default function BasicStack() {
           id="demo-helper-text-aligned"
           label="Login"
         />
-
-        <TextField
-          helperText="Please enter your name"
-          id="demo-helper-text-aligned"
-          label="Name"
-        />
-
         <TextField
           helperText="Please enter your password"
           id="outlined-password-input"
@@ -55,15 +42,29 @@ export default function BasicStack() {
           type="password"
           autoComplete="current-password"
         />
-        <Button variant="contained" disableElevation>
-          Log in
-        </Button>
+        {count === false && (
+          <>
+            <TextField
+              helperText="Please enter your name"
+              id="demo-helper-text-aligned"
+              label="Name"
+            />
+            <Button variant="contained" disableElevation>
+              Register
+            </Button>
+          </>
+        )}
+        {count === true && (
+          <>
+            <Button variant="contained" disableElevation>
+              Log in
+            </Button>
 
-        <Button variant="contained" disableElevation>
-          Register
-        </Button>
-
-        <Link href="#">{"Register"}</Link>
+            <Link href="#" onClick={() => setCount(false)}>
+              {"Register"}
+            </Link>
+          </>
+        )}
       </Stack>
     </Box>
   );
