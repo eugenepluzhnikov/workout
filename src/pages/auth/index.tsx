@@ -8,6 +8,17 @@ import Button from "@mui/material/Button";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+    console.log(username, password);
+  };
+  const register = () => {
+    console.log(username, password, name);
+  };
+
   return (
     <Box
       component="form"
@@ -30,30 +41,33 @@ export default function Auth() {
         </h1>
         <TextField
           helperText="Please enter your login"
-          id="demo-helper-text-aligned"
           label="Login"
+          value={username}
+          onChange={(e) => setUsername(e.target.value.trim())}
         />
         <TextField
           helperText="Please enter your password"
-          id="outlined-password-input"
           label="Password"
           type="password"
           autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value.trim())}
         />
         {!isLogin && (
           <>
             <TextField
               helperText="Please enter your name"
-              id="demo-helper-text-aligned"
               label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value.trim())}
             />
-            <Button variant="contained" disableElevation>
+            <Button variant="contained" disableElevation onClick={register}>
               Register
             </Button>
           </>
         )}
         {isLogin && (
-          <Button variant="contained" disableElevation>
+          <Button variant="contained" disableElevation onClick={login}>
             Log in
           </Button>
         )}
