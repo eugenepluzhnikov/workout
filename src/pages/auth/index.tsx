@@ -23,7 +23,6 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
 
   const validate = () => {
-
     let activeUsernameError = false;
     if (username.length < 3) {
       activeUsernameError = true;
@@ -62,9 +61,12 @@ export default function Auth() {
         password,
       }),
     });
-    const json = await result.json();
+    if (result.ok) {
+      const json = await result.json();
+      localStorage.setItem("accessToken", json.accessToken);
+      console.log(json);
+    }
     setIsLoading(false);
-    console.log(json);
   };
 
   const register = () => {
