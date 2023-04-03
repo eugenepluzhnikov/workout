@@ -1,11 +1,9 @@
-
+import { PrivateRoute } from "@/components/privateRoute";
 
 export default function Home() {
   return (
-    <>
-      <main>
-
-      </main>
-    </>
+    <PrivateRoute>
+      <main>hello</main>
+    </PrivateRoute>
   );
 }

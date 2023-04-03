@@ -6,10 +6,11 @@ import { blueGrey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { useRouter } from 'next/router' 
 import { API_URL } from "@/constants";
 
 export default function Auth() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
 
   const [username, setUsername] = useState("");
@@ -64,6 +65,7 @@ export default function Auth() {
     if (result.ok) {
       const json = await result.json();
       localStorage.setItem("accessToken", json.accessToken);
+      router.push('/')
       console.log(json);
     }
     setIsLoading(false);
