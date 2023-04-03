@@ -5,6 +5,9 @@ import TextField from "@mui/material/TextField";
 import { blueGrey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+
+import { API_URL } from "@/constants";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,36 +20,51 @@ export default function Auth() {
   const [isNameError, setIsNameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const validate = () => {
-    // проверили все 3 поля
 
+    let activeUsernameError = false;
     if (username.length < 3) {
-      setIsUsernameError(true);
-    } else {
-      setIsUsernameError(false);
+      activeUsernameError = true;
     }
+    setIsUsernameError(activeUsernameError);
 
+    let activePasswordError = false;
     if (
       password === "" ||
       !/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{6,}$/.test(password)
     ) {
-      setIsPasswordError(true);
-    } else {
-      setIsPasswordError(false);
+      activePasswordError = true;
     }
+    setIsPasswordError(activePasswordError);
 
-    if (!/^[a-zA-Z]+$/.test(name)) {
-      setIsNameError(true);
-    } else {
-      setIsNameError(false);
+    let activeNameError = false;
+    if (!isLogin && !/^[a-zA-Z]+$/.test(name)) {
+      activeNameError = true;
     }
-    // -----------------
-    return !(isPasswordError || isNameError || isUsernameError);
+    setIsNameError(activeNameError);
+
+    console.log(activeNameError, activePasswordError, activeUsernameError);
+    return !(activeNameError || activePasswordError || activeUsernameError);
   };
 
-  const login = () => {
+  const login = async () => {
     if (!validate()) return;
-    console.log(username, password);
+    setIsLoading(true);
+    const result = await fetch(API_URL + "/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+    const json = await result.json();
+    setIsLoading(false);
+    console.log(json);
   };
 
   const register = () => {
@@ -92,7 +110,8 @@ export default function Auth() {
           fullWidth={true}
           error={isPasswordError}
           helperText={
-            isPasswordError && `The length of password > 5 alphanumeric characters`
+            isPasswordError &&
+            `The length of password > 5 alphanumeric characters`
           }
           label="Password"
           type="password"
@@ -110,14 +129,14 @@ export default function Auth() {
               value={name}
               onChange={(e) => setName(e.target.value.trim())}
             />
-            <Button variant="contained" disableElevation onClick={register}>
+            <Button variant="contained" onClick={register}>
               Register
             </Button>
           </>
         )}
         {isLogin && (
-          <Button variant="contained" disableElevation onClick={login}>
-            Log in
+          <Button variant="contained" onClick={login} disabled={isLoading}>
+            {isLoading ? <CircularProgress /> : "Log in"}
           </Button>
         )}
         <Link onClick={() => setIsLogin(!isLogin)}>
