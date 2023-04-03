@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, version } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -8,14 +8,49 @@ import Button from "@mui/material/Button";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isUsernameError, setIsUsernameError] = useState(false);
+  const [isNameError, setIsNameError] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState(false);
+
+  const validate = () => {
+    // проверили все 3 поля
+
+    if (username.length < 3) {
+      setIsUsernameError(true);
+    } else {
+      setIsUsernameError(false);
+    }
+
+    if (
+      password === "" ||
+      !/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{6,}$/.test(password)
+    ) {
+      setIsPasswordError(true);
+    } else {
+      setIsPasswordError(false);
+    }
+
+    if (!(/^[a-zA-Z]+$/.test(name))) {
+      setIsNameError(true);
+    } else {
+      setIsNameError(false);
+    }
+    // -----------------
+    return !(isPasswordError || isNameError || isUsernameError);
+  };
+
   const login = () => {
+    if (!validate()) return;
     console.log(username, password);
   };
+
   const register = () => {
+    if (!validate()) return;
     console.log(username, password, name);
   };
 
@@ -40,12 +75,14 @@ export default function Auth() {
           Your workouts for the week
         </h1>
         <TextField
+          error={isUsernameError}
           helperText="Please enter your login"
           label="Login"
           value={username}
           onChange={(e) => setUsername(e.target.value.trim())}
         />
         <TextField
+          error={isPasswordError}
           helperText="Please enter your password"
           label="Password"
           type="password"
@@ -56,6 +93,7 @@ export default function Auth() {
         {!isLogin && (
           <>
             <TextField
+              error={isNameError}
               helperText="Please enter your name"
               label="Name"
               value={name}
