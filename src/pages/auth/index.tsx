@@ -35,7 +35,7 @@ export default function Auth() {
       setIsPasswordError(false);
     }
 
-    if (!(/^[a-zA-Z]+$/.test(name))) {
+    if (!/^[a-zA-Z]+$/.test(name)) {
       setIsNameError(true);
     } else {
       setIsNameError(false);
@@ -64,7 +64,13 @@ export default function Auth() {
         bgcolor: blueGrey[100],
       }}
     >
-      <Stack justifyContent="center" alignItems="center" spacing={1}>
+      <Stack
+        justifyContent="center"
+        margin={"0 auto"}
+        width={400}
+        alignItems="center"
+        spacing={1}
+      >
         <h1
           style={{
             marginTop: 30,
@@ -75,15 +81,19 @@ export default function Auth() {
           Your workouts for the week
         </h1>
         <TextField
+          fullWidth={true}
           error={isUsernameError}
-          helperText="Please enter your login"
+          helperText={isUsernameError && "The length of login > 2 characters"}
           label="Login"
           value={username}
           onChange={(e) => setUsername(e.target.value.trim())}
         />
         <TextField
+          fullWidth={true}
           error={isPasswordError}
-          helperText="Please enter your password"
+          helperText={
+            isPasswordError && `The length of password > 5 alphanumeric characters`
+          }
           label="Password"
           type="password"
           autoComplete="current-password"
@@ -93,8 +103,9 @@ export default function Auth() {
         {!isLogin && (
           <>
             <TextField
+              fullWidth={true}
               error={isNameError}
-              helperText="Please enter your name"
+              helperText={isNameError && "Name must be > 0 letters "}
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value.trim())}
