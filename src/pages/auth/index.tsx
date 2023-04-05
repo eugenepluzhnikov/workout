@@ -9,8 +9,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useRouter } from "next/router";
 import { API_URL } from "@/constants";
 
+import { useAppContext } from "@/context/context";
+
 export default function Auth() {
   const router = useRouter();
+  const { setUser } = useAppContext();
   const [isLogin, setIsLogin] = useState(true);
 
   const [username, setUsername] = useState("");
@@ -66,6 +69,7 @@ export default function Auth() {
     console.log(json);
     if (result.ok) {
       localStorage.setItem("accessToken", json.accessToken);
+      setUser(json.user);
       router.push("/");
     } else {
       alert(json.error);
@@ -92,7 +96,7 @@ export default function Auth() {
     if (result.ok) {
       alert("Success. You can now login with your username and password");
       setIsLogin(true);
-    } else{
+    } else {
       alert(json.error);
     }
     setIsLoading(false);
