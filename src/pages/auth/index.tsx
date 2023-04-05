@@ -6,7 +6,7 @@ import { blueGrey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from 'next/router' 
+import { useRouter } from "next/router";
 import { API_URL } from "@/constants";
 
 export default function Auth() {
@@ -62,18 +62,40 @@ export default function Auth() {
         password,
       }),
     });
+    const json = await result.json();
+    console.log(json);
     if (result.ok) {
-      const json = await result.json();
       localStorage.setItem("accessToken", json.accessToken);
-      router.push('/')
-      console.log(json);
+      router.push("/");
+    } else {
+      alert(json.error);
     }
     setIsLoading(false);
   };
 
-  const register = () => {
+  const register = async () => {
     if (!validate()) return;
-    console.log(username, password, name);
+    setIsLoading(true);
+    const result = await fetch(API_URL + "/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        name,
+      }),
+    });
+    const json = await result.json();
+    console.log(json);
+    if (result.ok) {
+      alert("Success. You can now login with your username and password");
+      setIsLogin(true);
+    } else{
+      alert(json.error);
+    }
+    setIsLoading(false);
   };
 
   return (
