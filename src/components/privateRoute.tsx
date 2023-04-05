@@ -21,34 +21,32 @@ export const PrivateRoute: FC<Props> = ({ children, requireAdmin }) => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       router.push("/auth");
-    } else {
-      if (!requireAdmin) {
-        setIsCanRender(true);
-        return;
-      }
-      if (!user) {
-        void fetch(API_URL + "/users/me", {
-          headers: {
-            Authorization: accessToken,
-          },
-        }).then((result) => {
-          if (result.ok) {
-            return result.json().then((data) => {
-              setUser(data);
-            });
-          } else {
-            router.push("/auth");
-          }
-        });
-        return;
-      }
-      if (user?.role === "admin") {
-        setIsCanRender(true);
-        return;
-      } else {
-        router.push("/");
-      }
+      return;
     }
+    if (!requireAdmin) {
+      setIsCanRender(true);
+      return;
+    }
+    if (!user) {
+      void fetch(API_URL + "/users/me", {
+        headers: {
+          Authorization: accessToken,
+        },
+      }).then((result) => {
+        if (result.ok) {
+          return result.json().then((data) => {
+            setUser(data);
+          });
+        }
+        router.push("/auth");
+      });
+      return;
+    }
+    if (user?.role === "admin") {
+      setIsCanRender(true);
+      return;
+    }
+    router.push("/");
   }, [router, requireAdmin, setUser, user]);
   return isCanRender ? (
     children
