@@ -42,7 +42,7 @@ export const PrivateRoute: FC<Props> = ({ children, requireAdmin }) => {
       });
       return;
     }
-    if (user?.role === "admin") {
+    if (user.role === "admin") {
       setIsCanRender(true);
       return;
     }
