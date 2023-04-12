@@ -23,6 +23,24 @@ import EditIcon from "@mui/icons-material/Edit";
 export default function Admin() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const deleteUser = async (id: string) => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    const result = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: accessToken as string,
+      },
+    });
+
+    if (!result.ok) return;
+
+    const newUsers = [...users].filter((user) => user.id !== id);
+    setUsers(newUsers);
+
+  };
+
   useEffect(() => {
     const getListOfUsers = async () => {
       const accessToken = localStorage.getItem("accessToken");
@@ -81,7 +99,7 @@ export default function Admin() {
                       <IconButton>
                         <EditIcon />
                       </IconButton>
-                      <IconButton>
+                      <IconButton onClick={() => deleteUser(user.id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Stack>
