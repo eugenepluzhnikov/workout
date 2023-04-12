@@ -10,10 +10,12 @@ import { blueGrey } from "@mui/material/colors";
 import Box from "@mui/material/Box";
 
 import { UsersList } from "@/components/admin/usersList/usersList";
+import { ModalEditUser } from "@/components/admin/modal/editUser/editUser";
 
 export default function Admin() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const deleteUser = async (id: string) => {
     const accessToken = localStorage.getItem("accessToken");
@@ -29,7 +31,6 @@ export default function Admin() {
 
     const newUsers = [...users].filter((user) => user.id !== id);
     setUsers(newUsers);
-
   };
 
   useEffect(() => {
@@ -58,7 +59,13 @@ export default function Admin() {
           bgcolor: blueGrey[100],
         }}
       >
-        <UsersList  users={users} setUsers={setUsers}/>
+        <UsersList users={users} setUsers={setUsers} setEditingUser={setEditingUser} />
+        <ModalEditUser
+          users={users}
+          setUsers={setUsers}
+          editingUser={editingUser}
+          setEditingUser={setEditingUser}
+        />
       </Box>
     </PrivateRoute>
   );

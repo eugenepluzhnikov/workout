@@ -19,9 +19,10 @@ import { API_URL } from "@/constants";
 type Props = {
   users: User[];
   setUsers: (users: User[]) => void;
+  setEditingUser: (user: User | null) => void;
 };
 
-export const UsersList: FC<Props> = ({ users, setUsers }) => {
+export const UsersList: FC<Props> = ({ users, setUsers, setEditingUser }) => {
   const deleteUser = async (id: string) => {
     const accessToken = localStorage.getItem("accessToken");
 
@@ -64,7 +65,7 @@ export const UsersList: FC<Props> = ({ users, setUsers }) => {
               <TableCell>{user.role}</TableCell>
               <TableCell align="right" padding="normal">
                 <Stack direction="row" spacing={1} justifyContent="flex-end">
-                  <IconButton>
+                  <IconButton onClick={()=>setEditingUser(user)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => deleteUser(user.id)}>
