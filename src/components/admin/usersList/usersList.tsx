@@ -69,10 +69,20 @@ export const UsersList: FC<Props> = ({ users, setUsers, setEditingUser }) => {
               <TableCell>{user.role}</TableCell>
               <TableCell align="right" padding="normal">
                 <Stack direction="row" spacing={1} justifyContent="center">
-                  <IconButton onClick={() => setEditingUser(user)}>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingUser(user);
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteUser(user.id)}>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteUser(user.id);
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </Stack>
