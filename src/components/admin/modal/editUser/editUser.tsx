@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
+import { API_URL } from "@/constants";
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -39,9 +41,44 @@ export const ModalEditUser: FC<Props> = ({
   const [name, setName] = useState(editingUser.name);
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(editingUser.role);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const save = () => {
+  const save = async () => {
     console.log(name, username, password, role);
+    // return;
+    
+    const data = {
+      ...(name && name !== editingUser.name ? { name } : {}),
+      ...(username && username !== editingUser.username ? { username } : {}),
+      ...(password ? { password } : {}),
+      ...(role && role !== editingUser.role ? { role } : {}),
+    };
+    console.log(data);
+    if (!Object.keys(data).length) return;
+    const accessToken = localStorage.getItem("accessToken");
+    setIsLoading(true);
+    const result = await fetch(`${API_URL}/users/${editingUser.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken as string,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!result.ok) return;
+
+    Reflect.deleteProperty(data, "password");
+    const newUsers = users.map((user) => {
+      return user.id !== editingUser.id
+        ? user
+        : {
+            ...user,
+            ...data,
+          };
+    });
+    setUsers(newUsers);
+    setIsLoading(false);
+    setEditingUser(null);
   };
 
   return (
@@ -91,8 +128,10 @@ export const ModalEditUser: FC<Props> = ({
         </Stack>
 
         <Stack spacing={2} direction="row" marginTop={2}>
-          <Button variant="contained" onClick={save}>Save</Button>
-          <Button variant="outlined" onClick={() => setEditingUser(null)}>
+          <Button variant="contained" onClick={save} disabled={isLoading}>
+            Save
+          </Button>
+          <Button variant="outlined" onClick={() => setEditingUser(null)} disabled={isLoading}>
             Cancel
           </Button>
         </Stack>
