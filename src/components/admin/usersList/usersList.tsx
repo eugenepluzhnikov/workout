@@ -42,13 +42,17 @@ export const UsersList: FC<Props> = ({ users, setUsers, setEditingUser }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
+        <TableHead
+          style={{
+            backgroundColor: "#e0e0e0",
+          }}
+        >
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>NAME</TableCell>
-            <TableCell>USERNAME</TableCell>
-            <TableCell>ROLE</TableCell>
-            <TableCell align="right">ACTIONS</TableCell>
+            <TableCell align="left"> ID</TableCell>
+            <TableCell align="left">NAME</TableCell>
+            <TableCell align="left">USERNAME</TableCell>
+            <TableCell align="left">ROLE</TableCell>
+            <TableCell align="center">ACTIONS</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -64,8 +68,8 @@ export const UsersList: FC<Props> = ({ users, setUsers, setEditingUser }) => {
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell align="right" padding="normal">
-                <Stack direction="row" spacing={1} justifyContent="flex-end">
-                  <IconButton onClick={()=>setEditingUser(user)}>
+                <Stack direction="row" spacing={1} justifyContent="center">
+                  <IconButton onClick={() => setEditingUser(user)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => deleteUser(user.id)}>

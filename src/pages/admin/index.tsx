@@ -8,9 +8,11 @@ import { API_URL } from "@/constants";
 import { blueGrey } from "@mui/material/colors";
 
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import { UsersList } from "@/components/admin/usersList/usersList";
 import { ModalEditUser } from "@/components/admin/modal/editUser/editUser";
+import { Stack } from "@mui/material";
 
 export default function Admin() {
   const [users, setUsers] = useState<User[]>([]);
@@ -34,15 +36,22 @@ export default function Admin() {
   }, []);
   return (
     <PrivateRoute requireAdmin={true}>
-      <Box
+      <Stack
         sx={{
-          display: "flex",
           alignItems: "center",
-          justifyContent: "center",
           height: "100%",
           bgcolor: blueGrey[100],
         }}
       >
+        <h1
+          style={{
+            marginTop: 30,
+            marginBottom: 70,
+            color: "#1565c0",
+          }}
+        >
+          Admin page.
+        </h1>
         <UsersList
           users={users}
           setUsers={setUsers}
@@ -56,7 +65,7 @@ export default function Admin() {
             setEditingUser={setEditingUser}
           />
         )}
-      </Box>
+      </Stack>
     </PrivateRoute>
   );
 }

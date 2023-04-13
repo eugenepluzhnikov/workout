@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import type { User } from "@/types/user";
 
@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,7 +23,7 @@ const style = {
 };
 
 type Props = {
-  editingUser: User | null;
+  editingUser: User;
   setEditingUser: (user: User | null) => void;
   users: User[];
   setUsers: (users: User[]) => void;
@@ -33,6 +35,15 @@ export const ModalEditUser: FC<Props> = ({
   users,
   setUsers,
 }) => {
+  const [username, setUsername] = useState(editingUser.username);
+  const [name, setName] = useState(editingUser.name);
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState(editingUser.role);
+
+  const save = () => {
+    console.log(name, username, password, role);
+  };
+
   return (
     <Modal
       open={!!editingUser}
@@ -43,8 +54,44 @@ export const ModalEditUser: FC<Props> = ({
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Edit User.
         </Typography>
-        <Stack spacing={2} direction="row">
-          <Button variant="contained">Save</Button>
+        <Stack spacing={2} marginTop={2}>
+          <TextField
+            label="Name"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value.trim())}
+          />
+          <TextField
+            label="Username"
+            variant="outlined"
+            value={username}
+            onChange={(e) => setUsername(e.target.value.trim())}
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value.trim())}
+          />
+          <TextField
+            select
+            label="Role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            {[
+              { value: "admin", label: "Admin" },
+              { value: "user", label: "User" },
+            ].map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
+
+        <Stack spacing={2} direction="row" marginTop={2}>
+          <Button variant="contained" onClick={save}>Save</Button>
           <Button variant="outlined" onClick={() => setEditingUser(null)}>
             Cancel
           </Button>
